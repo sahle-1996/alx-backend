@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
-"""Task 3: Least Recently Used (LRU) Caching System"""
+"""Least Recently Used (LRU) caching implementation."""
 
 from collections import OrderedDict
 from base_caching import BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """LRU caching system that inherits from BaseCaching."""
+    """LRU caching system using BaseCaching as a base class."""
 
     def __init__(self):
-        """Initialize the cache with an ordered dictionary."""
+        """Set up the cache as an ordered dictionary."""
         super().__init__()
         self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """Add an item to the cache and remove the least recently used if full."""
+        """Store an item in the cache and apply LRU eviction if necessary."""
         if key is None or item is None:
             return
 
         if key not in self.cache_data and len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            lru_key, _ = self.cache_data.popitem(last=False)
-            print(f"DISCARD: {lru_key}")
+            oldest_key, _ = self.cache_data.popitem(last=False)
+            print(f"DISCARD: {oldest_key}")
 
         self.cache_data[key] = item
         self.cache_data.move_to_end(key, last=False)
 
     def get(self, key):
-        """Retrieve an item from the cache by key and mark it as recently used."""
+        """Fetch an item from the cache by key, marking it as recently used."""
         if key in self.cache_data:
             self.cache_data.move_to_end(key, last=False)
         return self.cache_data.get(key)
